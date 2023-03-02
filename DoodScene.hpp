@@ -15,7 +15,7 @@ class DoodScene : public Scene, public KeyListener {
 public:
 
 
-    explicit DoodScene(int gridSize) {
+    DoodScene(int gridSize) {
 
 
         scene_ = Scene::create();
@@ -45,6 +45,8 @@ public:
 
 
 
+
+
     }
 
 //    void shootDood(float angle){
@@ -55,22 +57,18 @@ public:
 //
 
     void update(float dt) {
-        // Use the point to position an object in the scene
-        arrow_->setDirection(getShootDirection());
-        if (HitDectX(doodMap_[1])) {angle_ = math::PI - angle_;
-            std::printf("balls");
-        }
-        std::cout << (angle_) << "  ";
-        if (!HitDectY(doodMap_[1])) {shootDood(angle_, doodMap_[1], dt);
-            std::printf("cock");
-        }
-        else {
-            setDoodPos(getDoodPosX(doodMap_[1]), getDoodPosY(doodMap_[1]), doodMap_[1]);
-        }
+        dt_ = dt;
+        shootDood(fdKey_);
+        if (!moving_) {
+            fdKey_++;
+            makeDood(fdKey_);
 
-        std::cout << "X: " << getDoodPosX(doodMap_[1]) << "  ";
-        std::cout << "Y: " << getDoodPosY(doodMap_[1]) << std::endl;
-
+        }
+        if(doodMap_.size() > 10) {
+            for(int i = 1; i < doodMap_.size(); i++) {
+                std::cout << getDoodCoordX(doodMap_[i]) << getDoodCoordY(doodMap_[i]) << std::endl;
+            }
+        }
     }
 
     void setCoordSystem(int gridSize) {
@@ -85,6 +83,7 @@ public:
             std::shared_ptr<BoxGeometry> boxGeometry_ = BoxGeometry::create(1, 1, 0);
 
             auto doodMaterial = MeshBasicMaterial::create();
+            if(i == 1) {doodMaterial->color = Color::blue;}
             if (i%2 != 0) {doodMaterial->color = Color::red;}
             else{doodMaterial->color = Color::green;}
 
@@ -92,6 +91,7 @@ public:
             scene_->add(doodMap_[i]);
         }
     }
+
 
     int getGridSize() {
         return gridSize_;
@@ -111,7 +111,7 @@ public:
 
     void setAngle(float angle) {
         angle_ = angle;
-        std::cout << "Ang. print 1 " << angle_ << "  ";
+
     }
 
     float getAngle() {
@@ -136,18 +136,59 @@ public:
         return -(body->position.y - OrigoY_);
     }
 
+    int getDoodCoordX(std::shared_ptr<Mesh> body) {
+        return round(body->position.x) - OrigoX_;
+    }
+
+    int getDoodCoordY(std::shared_ptr<Mesh> body) {
+        return -(round(body->position.y) - OrigoY_);
+    }
 
 
-    void shootDood(float angle, std::shared_ptr<Mesh> body, float dt){
 
-        float deltaDist = shootSpeed_*dt;
+    void moveFrameWise(float angle, std::shared_ptr<Mesh> body, float dt){
+        moveAngle_ = angle;
+        float deltaDist = moveSpeed_*dt;
         auto position = body->position;
-        position.setX(position.x + deltaDist * cos(angle));
-        position.setY(position.y - deltaDist * sin(angle));
+        position.setX(position.x + deltaDist * cos(moveAngle_));
+        position.setY(position.y - deltaDist * sin(moveAngle_));
         body->position = position;
     }
 
-    bool HitDectY (std::shared_ptr<Mesh> body) {
+    void shootDood(int doodKey) {
+        if(!moving_) {
+            angle_ = math::randomInRange(math::PI/8, math::PI - math::PI/8); //Debug stuff lies here
+            moveAngle_ = angle_;
+            setDoodPos(gridSize_/2, 0, doodMap_[doodKey]);
+        }
+
+        lastCoord_.set(getDoodCoordX(doodMap_[doodKey]), getDoodCoordY(doodMap_[doodKey]), 0);
+        arrow_->setDirection(getShootDirection());
+        if (borderDectX(doodMap_[doodKey])) {
+            moveAngle_ = math::PI - moveAngle_;
+        }
+        if (!borderDectY(doodMap_[doodKey])) {
+
+
+            if (!cellOccupied(getDoodCoordX(doodMap_[doodKey]), getDoodCoordY(doodMap_[doodKey]))) {
+
+                moveFrameWise(moveAngle_, doodMap_[doodKey], dt_);
+                moving_ = true;
+
+            }
+            else {
+                moving_ = false;
+                setDoodPos(lastCoord_.x, lastCoord_.y, doodMap_[doodKey]);
+            }
+        }
+
+            else {
+            moving_ = false;
+            setDoodPos(getDoodPosX(doodMap_[doodKey]), getDoodPosY(doodMap_[doodKey]), doodMap_[doodKey]);
+        }
+    }
+
+    bool borderDectY (std::shared_ptr<Mesh> body) {
         auto position = body->position;
         if(getDoodPosY(body) >= gridSize_-1) {
             return true;
@@ -155,7 +196,7 @@ public:
         return false;
     }
 
-    bool HitDectX (std::shared_ptr<Mesh> body) {
+    bool borderDectX (std::shared_ptr<Mesh> body) {
         auto position = body->position;
         if((getDoodPosX(body) >= gridSize_-1) || (getDoodPosX(body) < 0)) {
             return true;
@@ -165,11 +206,26 @@ public:
 
     Vector3 getShootDirection() {
         Vector3 direction;
-        std::cout << angle_ << "  ";
         direction.x = cos(angle_);
         direction.y = -sin(angle_);
-        std::cout << "Shoot. " << direction << "  ";
         return direction;
+    }
+
+    bool cellOccupied(int x, int y) {
+    for(int i = 1; i < doodMap_.size(); i++) {
+        std::cout << "X: " << x << " - " << getDoodCoordX(doodMap_[i]) <<  " || ";
+        std::cout << "Y: " << y << " - " << getDoodCoordY(doodMap_[i]) <<  std::endl;
+        if(x == getDoodCoordX(doodMap_[i])) {
+            std::printf("X : true \n");
+                if(y == getDoodCoordY(doodMap_[i]) - 1) { //Wut?, Added -1 to make work, Fix dis plz
+                    std::printf("Y : true \n");
+                std::cout << " || " << "true" << std::endl;
+                return true;
+            }
+        }
+    }
+        std::cout << "false" << std::endl;
+    return false;
     }
 
 
@@ -184,11 +240,17 @@ private:
     std::shared_ptr<ArrowHelper> arrow_;
     float OrigoX_;
     float OrigoY_;
-    float shootSpeed_ = 1;
+    float moveSpeed_ = 5;
     float angle_;
+    float moveAngle_;
+    float dt_;
+    int fdKey_ = 1;
+
+    bool moving_ = false;
 
     Vector3 arrowSize_;
     Vector3 shootOrigin_;
+    Vector3 lastCoord_;
 
     Vector3 shootDirection_;
     std::unordered_map<int, std::shared_ptr<Mesh>> doodMap_;

@@ -14,6 +14,7 @@ int main() {
     GLRenderer renderer(canvas);
     renderer.setClearColor(Color::black);
 
+scene.makeDood(1);
 
     canvas.onWindowResize([&](WindowSize size) { //Resizes the canvas, but keeps the grid in a locked aspect ratio
 
@@ -27,11 +28,8 @@ int main() {
 
     });
 
-    scene.makeDood(1);
-    scene.setDoodPos(scene.getGridSize()/2, 0, scene.getDood(1));
 
-    scene.makeDood(2);
-    scene.setDoodPos(5, 5, scene.getDood(2));
+
 
     float angle = math::randomInRange(0.0, math::PI);
 
