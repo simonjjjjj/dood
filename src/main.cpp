@@ -1,7 +1,7 @@
 
 #include "threepp/threepp.hpp"
 #include "threepp/extras/imgui/imgui_context.hpp"
-#include "DoodScene.hpp"
+#include "../DoodScene.hpp"
 
 using namespace threepp;
 
@@ -14,7 +14,7 @@ int main() {
     GLRenderer renderer(canvas);
     renderer.setClearColor(Color::black);
 
-scene.makeDood(1);
+
 
     canvas.onWindowResize([&](WindowSize size) { //Resizes the canvas, but keeps the grid in a locked aspect ratio
 

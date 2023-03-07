@@ -3,8 +3,8 @@ warning: feature feature2 was passed, but that is not a feature supported by  su
 Detecting compiler hash for triplet x64-windows...
 Detecting compiler hash for triplet x86-windows...
 All requested packages are currently installed.
-Restored 0 package(s) from C:\Users\sijoj\AppData\Local\vcpkg\archives in 200.7 us. Use --debug to see more details.
-Total install time: 255.6 us
+Restored 0 package(s) from C:\Users\sijoj\AppData\Local\vcpkg\archives in 267.5 us. Use --debug to see more details.
+Total install time: 786.6 us
 imgui provides CMake targets:
 
     # this is heuristically generated, and may not be correct

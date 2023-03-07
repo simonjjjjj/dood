@@ -20,18 +20,23 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e75159c-c2ef-4bd7-9399-a1d5b71ad41b" name="Changes" comment="Collision is working 50%. End my suffering.">
+    <list default="true" id="1e75159c-c2ef-4bd7-9399-a1d5b71ad41b" name="Changes" comment="Collision is working 50%. Working on implementing bounding box for improved results. End my suffering.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DoodScene.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/DoodScene.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-test-Debug-9c82106903ae8767ecac.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test.dir/main.cpp.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/rules.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/rules.ninja" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test.dir/vc140.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test.dir/vc140.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/test.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/test.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/test.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/test.ilk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/test.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/test.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/vcpkg-manifest-install.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/vcpkg-manifest-install.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,10 +50,14 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="Suffering_branch" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://0" root0="SKIP_INSPECTION" />
+    <setting file="cidr-memory-view://1" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -82,6 +91,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\sijoj\CLionProjects\dood\src" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
@@ -102,7 +116,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1677682061304</updated>
-      <workItem from="1677682065496" duration="31851000" />
+      <workItem from="1677682065496" duration="51388000" />
     </task>
     <task id="LOCAL-00001" summary="Shoot is indicated by a scuffed arrow, so that is good.">
       <created>1677683250815</created>
@@ -118,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677767256447</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Collision is working 50%. Working on implementing bounding box for improved results. End my suffering.">
+      <created>1678189209222</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1678189209222</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -127,6 +148,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Shoot is indicated by a scuffed arrow, so that is good." />
     <MESSAGE value="Collision is working 50%. End my suffering." />
-    <option name="LAST_COMMIT_MESSAGE" value="Collision is working 50%. End my suffering." />
+    <MESSAGE value="Collision is working 50%. Working on implementing bounding box for improved results. End my suffering." />
+    <option name="LAST_COMMIT_MESSAGE" value="Collision is working 50%. Working on implementing bounding box for improved results. End my suffering." />
   </component>
 </project>
