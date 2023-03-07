@@ -37,10 +37,9 @@ scene.makeDood(1);
     //scene.setAngle(math::PI/2);
     std::cout << "Ang2. " << angle << "  ";
 
-    float time = 0;
-    canvas.animate([&](float dt) {
-        time += dt;
-        if(time > 1) {time = 0;}
+
+    canvas.animate([&](float t, float dt) {
+
         scene.update(dt);
         renderer.render(scene.getScene(), scene.getCamera());
 

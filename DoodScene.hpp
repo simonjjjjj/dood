@@ -11,6 +11,36 @@
 
 using namespace threepp;
 
+//class Dood {
+//public:
+
+/*    Dood(int doodType) {
+
+    }
+
+    void makeDood(int i) {  //Just for testing, needs implementing
+        {
+            std::shared_ptr<BoxGeometry> boxGeometry_ = BoxGeometry::create(1, 1, 0);
+
+            auto doodMaterial = MeshBasicMaterial::create();
+            if (i%2 != 0) {doodMaterial->color = Color::red;}
+            else{doodMaterial->color = Color::green;}
+
+
+            doodMap_[i] = Mesh::create(boxGeometry_, doodMaterial);
+            boxMap_[i] = Box3().setFromObject(*doodMap_[i]);  //WTF? Figure this one out plz
+
+
+
+            auto helper = Box3Helper::create(boxMap_[i], Color::blue);
+            scene_->add(helper);
+
+
+            scene_->add(doodMap_[i]);
+        }
+    }
+};*/
+
 class DoodScene : public Scene, public KeyListener {
 public:
 
@@ -41,20 +71,8 @@ public:
         scene_->add(arrow_);
 
 
-
-
-
-
-
-
     }
 
-//    void shootDood(float angle){
-//    for(int i = 0; i < gridSize_; i++){
-//
-//    }
-//    }
-//
 
     void update(float dt) {
         dt_ = dt;
@@ -64,11 +82,7 @@ public:
             makeDood(fdKey_);
 
         }
-        if(doodMap_.size() > 10) {
-            for(int i = 1; i < doodMap_.size(); i++) {
-                std::cout << getDoodCoordX(doodMap_[i]) << getDoodCoordY(doodMap_[i]) << std::endl;
-            }
-        }
+
     }
 
     void setCoordSystem(int gridSize) {
@@ -83,11 +97,19 @@ public:
             std::shared_ptr<BoxGeometry> boxGeometry_ = BoxGeometry::create(1, 1, 0);
 
             auto doodMaterial = MeshBasicMaterial::create();
-            if(i == 1) {doodMaterial->color = Color::blue;}
-            if (i%2 != 0) {doodMaterial->color = Color::red;}
-            else{doodMaterial->color = Color::green;}
+            if (i % 2 != 0) { doodMaterial->color = Color::red; }
+            else { doodMaterial->color = Color::green; }
+
 
             doodMap_[i] = Mesh::create(boxGeometry_, doodMaterial);
+            boxMap_[i] = Box3().setFromObject(*doodMap_[i]);  //WTF? Figure this one out plz
+
+
+
+            auto helper = Box3Helper::create(boxMap_[i], Color::blue);
+            scene_->add(helper);
+
+
             scene_->add(doodMap_[i]);
         }
     }
@@ -118,13 +140,12 @@ public:
         return angle_;
     }
 
-    void setDoodPos(float x, float y, std::shared_ptr<Mesh> body){
+    void setDoodPos(float x, float y, std::shared_ptr<Mesh> body) {
         auto position = body->position;
         position.setX(OrigoX_ + round(x));
         position.setY(OrigoY_ - round(y));
 
-        std::cout << round(OrigoX_ + x);
-        std::cout << round(OrigoY_ - y) << std::endl;
+
         body->position = position;
     }
 
@@ -144,11 +165,13 @@ public:
         return -(round(body->position.y) - OrigoY_);
     }
 
+    //std::unordered_map
 
 
-    void moveFrameWise(float angle, std::shared_ptr<Mesh> body, float dt){
+
+    void moveFrameWise(float angle, std::shared_ptr<Mesh> body, float dt) {
         moveAngle_ = angle;
-        float deltaDist = moveSpeed_*dt;
+        float deltaDist = moveSpeed_ * dt;
         auto position = body->position;
         position.setX(position.x + deltaDist * cos(moveAngle_));
         position.setY(position.y - deltaDist * sin(moveAngle_));
@@ -156,10 +179,10 @@ public:
     }
 
     void shootDood(int doodKey) {
-        if(!moving_) {
-            angle_ = math::randomInRange(math::PI/8, math::PI - math::PI/8); //Debug stuff lies here
+        if (!moving_) {
+            angle_ = math::randomInRange(math::PI / 8, math::PI - math::PI / 8); //Debug stuff lies here
             moveAngle_ = angle_;
-            setDoodPos(gridSize_/2, 0, doodMap_[doodKey]);
+            setDoodPos(gridSize_ / 2, 0, doodMap_[doodKey]);
         }
 
         lastCoord_.set(getDoodCoordX(doodMap_[doodKey]), getDoodCoordY(doodMap_[doodKey]), 0);
@@ -175,30 +198,27 @@ public:
                 moveFrameWise(moveAngle_, doodMap_[doodKey], dt_);
                 moving_ = true;
 
-            }
-            else {
+            } else {
                 moving_ = false;
                 setDoodPos(lastCoord_.x, lastCoord_.y, doodMap_[doodKey]);
             }
-        }
-
-            else {
+        } else {
             moving_ = false;
             setDoodPos(getDoodPosX(doodMap_[doodKey]), getDoodPosY(doodMap_[doodKey]), doodMap_[doodKey]);
         }
     }
 
-    bool borderDectY (std::shared_ptr<Mesh> body) {
+    bool borderDectY(std::shared_ptr<Mesh> body) {
         auto position = body->position;
-        if(getDoodPosY(body) >= gridSize_-1) {
+        if (getDoodPosY(body) >= gridSize_ - 1) {
             return true;
         }
         return false;
     }
 
-    bool borderDectX (std::shared_ptr<Mesh> body) {
+    bool borderDectX(std::shared_ptr<Mesh> body) {
         auto position = body->position;
-        if((getDoodPosX(body) >= gridSize_-1) || (getDoodPosX(body) < 0)) {
+        if ((getDoodPosX(body) >= gridSize_ - 1) || (getDoodPosX(body) < 0)) {
             return true;
         }
         return false;
@@ -212,24 +232,15 @@ public:
     }
 
     bool cellOccupied(int x, int y) {
-    for(int i = 1; i < doodMap_.size(); i++) {
-        std::cout << "X: " << x << " - " << getDoodCoordX(doodMap_[i]) <<  " || ";
-        std::cout << "Y: " << y << " - " << getDoodCoordY(doodMap_[i]) <<  std::endl;
-        if(x == getDoodCoordX(doodMap_[i])) {
-            std::printf("X : true \n");
-                if(y == getDoodCoordY(doodMap_[i]) - 1) { //Wut?, Added -1 to make work, Fix dis plz
-                    std::printf("Y : true \n");
-                std::cout << " || " << "true" << std::endl;
-                return true;
+        for (int i = 1; i < doodMap_.size(); i++) {
+            if (x == getDoodCoordX(doodMap_[i])) {
+                if (y == getDoodCoordY(doodMap_[i]) - 1) { //Wut?, Added -1 to make work, Fix dis plz
+                    return true;
+                }
             }
         }
+        return false;
     }
-        std::cout << "false" << std::endl;
-    return false;
-    }
-
-
-
 
 
 private:
@@ -240,7 +251,7 @@ private:
     std::shared_ptr<ArrowHelper> arrow_;
     float OrigoX_;
     float OrigoY_;
-    float moveSpeed_ = 5;
+    float moveSpeed_ = 20;
     float angle_;
     float moveAngle_;
     float dt_;
@@ -254,6 +265,7 @@ private:
 
     Vector3 shootDirection_;
     std::unordered_map<int, std::shared_ptr<Mesh>> doodMap_;
+    std::unordered_map<int, Box3> boxMap_;
 
 
 
