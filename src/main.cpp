@@ -31,13 +31,6 @@ int main() {
 
 
 
-    float angle = math::randomInRange(0.0, math::PI);
-
-    scene.setAngle(angle);
-    //scene.setAngle(math::PI/2);
-    std::cout << "Ang2. " << angle << "  ";
-
-
     canvas.animate([&](float t, float dt) {
 
         scene.update(dt);

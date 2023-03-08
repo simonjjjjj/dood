@@ -23,7 +23,6 @@ public:
             std::shared_ptr<BoxGeometry> boxGeometry_ = BoxGeometry::create(1, 1, 0);
 
             auto doodMaterial = MeshBasicMaterial::create();
-            std::cout << i%6 <<std::endl;
 
             switch (i%6) {
                 case 0:
@@ -72,11 +71,11 @@ public:
 
     void setPosition(Vector3 position) {
         position_ = position;
-        std::cout << position_ << " - " << position << std::endl;
         updatePos();
     }
 
     void setPosition(float x, float y) {
+        oldPosition_ = position_;
         position_.setX(x);
         position_.setY(y);
         updatePos();
@@ -86,7 +85,8 @@ public:
 
     void updatePos(){
         doodBod_->position = position_;
-        doodBox_.translate(position_); //PLZ REVISIT!
+        doodBox_.set(position_ - doodSize_/2, position_ + doodSize_/2);
+        //doodBox_.translate(position_ - oldPosition_); //PLZ REVISIT!
     }
 
 
@@ -96,6 +96,8 @@ private:
     Box3 doodBox_;
     std::shared_ptr<Box3Helper> doodHelper_;
     Vector3 position_;
+    Vector3 oldPosition_;
+    Vector3 doodSize_ = {1, 1, 0};
 };
 
 class DoodScene : public Scene, public KeyListener {
@@ -266,7 +268,8 @@ public:
 
 
             //if (!cellOccupied(getDoodCoordX(doodMap_.at(doodKey)), getDoodCoordY(doodMap_.at(doodKey)))) {
-            if(!collision(body)){
+            if(!collision(body) || body.getPosition() == Vector3(0, 0, 0)){
+                std::cout << body.getPosition() << std::endl;
                 std::printf("!6!\n");
 
                 moveFrameWise(moveAngle_, body, dt_);
@@ -275,12 +278,13 @@ public:
             } else {
                 moving_ = false;
                 setDoodPos(getDoodPosX(body), getDoodPosY(body), body);
-                std::printf("Shit\n");
+                std::printf("Collision\n");
             }
-        } else {
+        }
+        else {
             moving_ = false;
             setDoodPos(getDoodPosX(body), getDoodPosY(body), body);
-            std::printf("Fuck\n");
+            std::printf("Bord.det_Y\n");
         }
     }
 
@@ -337,7 +341,7 @@ public:
             }
             Box3 otherBox = it.second.getDoodBox();
             if (bodyBox.intersectsBox(otherBox)) {
-                return true;
+                return true; //dude
             }
         }
         return false;
