@@ -70,6 +70,7 @@ public:
     }
 
     void setPosition(Vector3 position) {
+        oldPosition_ = position_;
         position_ = position;
         updatePos();
     }
@@ -79,6 +80,15 @@ public:
         position_.setX(x);
         position_.setY(y);
         updatePos();
+    }
+
+    void backStep() {
+        position_ = oldPosition_;
+        updatePos();
+    }
+
+    Vector3 getOldPos(){
+        return oldPosition_;
     }
 
 
@@ -207,10 +217,8 @@ public:
     }
 
     void setDoodPos(float x, float y, Dood body) {
-        auto position = body.getPosition();
         position.setX(OrigoX_ + round(x));
         position.setY(OrigoY_ - round(y));
-
 
         body.setPosition(position);
     }
@@ -221,6 +229,14 @@ public:
 
     float getDoodPosY(Dood body) {
         return -(body.getPosition().y - OrigoY_);
+    }
+
+    float getOldPosX(Dood body) {
+        return body.getOldPos().x - OrigoX_;
+    }
+
+    float getOldPosY(Dood body) {
+        return -(body.getOldPos().y - OrigoY_);
     }
 
     int getDoodCoordX(Dood body) {
@@ -242,7 +258,7 @@ public:
         std::cout << position << " - ";
         position.setX(position.x + deltaDist * cos(moveAngle_));
         position.setY(position.y - deltaDist * sin(moveAngle_));
-        std::cout << position << std::endl;
+        std::cout << "Balls" << position << std::endl;
         body.setPosition(position);
     }
 
@@ -259,7 +275,8 @@ public:
 
         }
 
-        lastCoord_.set(getDoodCoordX(body), getDoodCoordY(body), 0);
+        lastPos_.set(body.getPosition().x, body.getPosition().y, 0);
+        std::cout << lastPos_ << std::endl;
         arrow_->setDirection(getShootDirection());
         if (borderDectX(body)) {
             moveAngle_ = math::PI - moveAngle_;
@@ -277,7 +294,9 @@ public:
 
             } else {
                 moving_ = false;
-                setDoodPos(getDoodPosX(body), getDoodPosY(body), body);
+                setDoodPos(getOldPosX(body), getOldPosY(body), body);
+                //setDoodPos(body.getOldPos().x, body.getOldPos().y, body);
+                //body.backStep();
                 std::printf("Collision\n");
             }
         }
@@ -356,7 +375,7 @@ private:
     std::shared_ptr<ArrowHelper> arrow_;
     float OrigoX_;
     float OrigoY_;
-    float moveSpeed_ = 10;
+    float moveSpeed_ = 20;
     float angle_;
     float moveAngle_;
     float dt_;
@@ -366,7 +385,7 @@ private:
 
     Vector3 arrowSize_;
     Vector3 shootOrigin_;
-    Vector3 lastCoord_;
+    Vector3 lastPos_;
 
     Vector3 shootDirection_;
     std::unordered_map<int, Dood> doodMap_;
